@@ -15,11 +15,11 @@ namespace RepositoryLayer.Services
      public class UserDataBaseRL : IUserRL
     {
         private UserContext fundooContext;
-        private readonly string _secret;
+        
         public UserDataBaseRL(UserContext fundooContext, IConfiguration config)
         {
             this.fundooContext = fundooContext;
-            this._secret = config.GetSection("AppSettings").GetSection("Key").Value;
+            
         }
 
         public User RegisterNewUser(User newUser)
@@ -35,39 +35,33 @@ namespace RepositoryLayer.Services
             }
             return null;
         }
-        public User UserLogin(Login login)
+        public User UserLogin(string email , string password)
         {
-            var user = fundooContext.FundooNotes.FirstOrDefault(user => user.Email == login.Email);
+            
+            var user = fundooContext.FundooNotes.FirstOrDefault(user => user.Email == email && user.Password == password);
+            
             if(user == null)
             {
                 return null;
             }
+
             return user;
+            
         }
         
-        public string GenerateSecurityToken(string Email, int id)
+        
+        public User ForgotPassword(string Email)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Email, Email),
-                    new Claim("userId", id.ToString(), ClaimValueTypes.Integer)
-
-       
-
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(20),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            string jwttoken = tokenHandler.WriteToken(token);
-            return jwttoken;
+            throw new NotImplementedException();
         }
 
-        //public User ForgotPassword(string Email)
+        public User ResetPassword(ResetPassword newPassword)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // public User ForgotPassword(string Email)
         //{
         //    var result = fundooContext.FundooNotes.Where(i => i.Email == user).FirstOrDefault();
         //    if (result != null)
@@ -79,10 +73,11 @@ namespace RepositoryLayer.Services
         //    else
         //    {
         //        return null;
-        //    }
 
-        //    public User ResetPassword(string existingUser, string NewPassword)
-        //    {
+        //}
+
+        // public User ResetPassword(string existingUser, string NewPassword)
+        //{
         //        var result = fundooContext.FundooNotes.Where(i => i.Email == User).FirstOrDefault();
         //        if (result != null)
         //        {
@@ -91,22 +86,14 @@ namespace RepositoryLayer.Services
         //            return User;
         //        }
         //        return null;
-                
-        //    }
 
         //}
 
-        public User ResetPassword(User existingUser, string password)
-        {
-            throw new NotImplementedException();
-        }
+        //}
 
-        public User ForgotPassword(string Email)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+
 
 
 

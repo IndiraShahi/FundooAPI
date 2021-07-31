@@ -63,10 +63,11 @@ namespace RepositoryLayer.Services
             return users.Remove(user);
         }
 
-        public User UserLogin(Login login)
+        public User UserLogin(string email , string password)
         {
-            var user = users.Find(x => x.Email == login.Email && x.Password == login.Password);
-            return user;
+            throw new NotImplementedException();
+            // var user = users.Find(x => x.Email == login.Email && x.Password == login.Password);
+            // return user;
         }
         public User ForgotPassword(string email)
         {

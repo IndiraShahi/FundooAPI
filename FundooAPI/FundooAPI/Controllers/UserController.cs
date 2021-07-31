@@ -38,10 +38,11 @@ namespace FundooAPI.Controllers
         [Route("Login")]
         public ActionResult Login(Login login)
         {
-            var user = userBL.UserLogin(login);
+            var user = userBL.UserLogin(login.Email,login.Password);
             if (user != null)
             {
-                return Ok(new { Success = true, Message = $"Login Successfull"});
+                string token = userBL.GenerateSecurityToken(user.Email, user.UserId);
+                return Ok(new { Success = true, Message = $"Login Successfull",Token = token});
             }
             return NotFound("Invalid UserName or Password");
         }
@@ -52,12 +53,13 @@ namespace FundooAPI.Controllers
         [Route("forgotpassword")]
         public ActionResult Forgotpassword(User user)
         {
+            
             throw new NotImplementedException();
         }
 
         [HttpPut]
         [Route("resetpassword")]
-        public ActionResult ResetPassword(ResetPassword reset)
+        public ActionResult ResetPassword(ResetPassword resetPassword)
         {
             throw new NotImplementedException();
         }

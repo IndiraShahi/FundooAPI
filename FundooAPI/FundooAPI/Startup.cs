@@ -1,5 +1,6 @@
 using BuisnessLayer.Interface;
 using BuisnessLayer.Services;
+using CommonLayer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,9 @@ namespace FundooAPI
 
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:FundooDB"]));
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Key"]);
+            
+
+           
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

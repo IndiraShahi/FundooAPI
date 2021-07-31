@@ -9,8 +9,8 @@ namespace RepositoryLayer.Interface
     {
         User RegisterNewUser(User newUser);
        
-        User UserLogin(Login login);
+        User UserLogin(string email , string password);
         User ForgotPassword(string Email);
-        User ResetPassword(User existingUser, string password);
+        User ResetPassword(ResetPassword newPassword);
     }
 }

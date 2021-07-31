@@ -9,8 +9,9 @@ namespace BuisnessLayer.Interface
     {
         
         User RegisterNewUser(User newUser);
-        User UserLogin(Login login);
-        User ForgotPassword(string userName);
-        User ResetPassword(User existingUser, string password);
+        User UserLogin(string email , string password);
+        User ForgotPassword(string Email);
+        User ResetPassword(ResetPassword newPassword);
+        string GenerateSecurityToken(string Email, long UserId);
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RepositoryLayer.Services
 {
-    class UserDataBaseRL : IUserRL
+     public class UserDataBaseRL : IUserRL
     {
         private UserContext fundooContext;
         private readonly string _secret;
@@ -45,7 +45,7 @@ namespace RepositoryLayer.Services
             return user;
         }
         
-        public string GenerateSecurityToken(string Email)
+        public string GenerateSecurityToken(string Email, int id)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secret);
@@ -54,6 +54,8 @@ namespace RepositoryLayer.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Email, Email),
+                    new Claim("userId", id.ToString(), ClaimValueTypes.Integer)
+
        
 
                 }),

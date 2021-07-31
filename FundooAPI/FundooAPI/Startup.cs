@@ -35,7 +35,8 @@ namespace FundooAPI
         {
             services.AddControllers();
             services.AddScoped<IUserBL, UserBL>();
-            services.AddScoped<IUserRL, UserRL>();
+            services.AddScoped<IUserRL, UserDataBaseRL>();
+
             services.AddDbContext<UserContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:FundooDB"]));
             var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:Key"]);
             services.AddAuthentication(x =>

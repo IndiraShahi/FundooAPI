@@ -22,46 +22,70 @@ namespace FundooAPI.Controllers
             this.userBL = userBL;
         }
 
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("Register")]
         public ActionResult RegisterNewUser(User newUser)
         {
-            User user = userBL.RegisterNewUser(newUser);
-            if (user != null)
-                return Created(newUser.Email, user);
-            return BadRequest("User Already Exists!!");
+            try
+            {
+                userBL.RegisterNewUser(newUser);
+                return Ok(new { success = true, message = "User Registered successfully", newUser.Email, newUser.FirstName, newUser.LastName });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+
         }
 
         
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("Login")]
         public ActionResult Login(Login login)
         {
-            var user = userBL.UserLogin(login.Email,login.Password);
-            if (user != null)
+            try
             {
-                string token = userBL.GenerateSecurityToken(user.Email, user.UserId);
-                return Ok(new { Success = true, Message = $"Login Successfull",Token = token});
+                var user = userBL.UserLogin(login.Email, login.Password);
+                if (user != null)
+                {
+                    string token = userBL.GenerateSecurityToken(user.Email, user.UserId);
+                    return Ok(new { Success = true, Message = $"Login Successfull", Token = token });
+                }
+                return BadRequest(new { message = "Please enter correct email or password" });
             }
-            return NotFound("Invalid UserName or Password");
-        }
-
-       
-
-        [HttpPost]
-        [Route("forgotpassword")]
-        public ActionResult Forgotpassword(User user)
-        {
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+                
+            }
             
-            throw new NotImplementedException();
         }
 
-        [HttpPut]
-        [Route("resetpassword")]
+        [HttpPost("forgotpassword")]
+        public ActionResult Forgotpassword(ForgetPassword Email)
+        {
+            try
+            {
+                userBL.ForgotPassword(Email.Email);
+                return Ok(new { message = "Link sent to the mail!" });
+            }
+            catch 
+            {
+                return BadRequest(new { message = "User does not exist!" });
+            }
+        }
+
+        [HttpPut("resetpassword")]
         public ActionResult ResetPassword(ResetPassword resetPassword)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = userBL.ResetPassword(resetPassword);
+                return Ok(new { message = "Password reset successful", Data = resetPassword.Email });
+            }
+            catch 
+            {
+                return BadRequest(new { message = "Email dosen't exist" });
+            }
         }
     }
 }

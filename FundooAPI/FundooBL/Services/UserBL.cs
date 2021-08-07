@@ -4,10 +4,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.SqlServer.Management.SqlParser.Metadata;
 using RepositoryLayer.Interface;
+using RepositoryLayer.MSMQUtility;
 using RepositoryLayer.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,6 +20,7 @@ namespace BuisnessLayer.Services
     {
         private IUserRL userRL;
         private readonly string _secret;
+        
 
         public UserBL(IUserRL userRL , IConfiguration config)
         {
@@ -25,42 +29,48 @@ namespace BuisnessLayer.Services
         }
 
         
-        public User UserLogin(string email , string password)
+        public Response UserLogin(string email , string password)
         {
-            User user = null;
-            if (email != null && password != null)
-                user = userRL.UserLogin(email , password);
-            if (user != null)
-            {
-                return user;
-            }
-            return null;
-            
+            return userRL.UserLogin(email, password);
+
         }
         
        
-        public User RegisterNewUser(User newUser)
+        public bool RegisterNewUser(User newUser)
         {
-            if (newUser != null && newUser.Password.Equals(newUser.ConfirmPassword))
+            try
             {
-                var user = userRL.RegisterNewUser(newUser);
-                return user;
+                userRL.RegisterNewUser(newUser);
+                return true;
             }
-            return null;
-
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public User ForgotPassword(string Email)
+        public bool ForgotPassword(string Email)
         {
-           
-
-            throw new NotImplementedException();
+            try
+            {
+                return userRL.ForgotPassword(Email);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public User ResetPassword(ResetPassword newPassword)
+        public bool ResetPassword(ResetPassword resetPassword)
         {
-            
-            throw new NotImplementedException();
+            try
+            {
+                return userRL.ResetPassword(resetPassword);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public string GenerateSecurityToken(string Email, long UserId)
@@ -83,6 +93,10 @@ namespace BuisnessLayer.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             string jwttoken = tokenHandler.WriteToken(token);
             return jwttoken;
+        }
+        public User GetUser(string email)
+        {
+            return userRL.GetUser(email);
         }
     }
 }

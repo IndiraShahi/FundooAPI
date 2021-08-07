@@ -8,10 +8,11 @@ namespace BuisnessLayer.Interface
     public interface IUserBL
     {
         
-        User RegisterNewUser(User newUser);
-        User UserLogin(string email , string password);
-        User ForgotPassword(string Email);
-        User ResetPassword(ResetPassword newPassword);
+        bool RegisterNewUser(User newUser);
+        Response UserLogin(string email , string password);
+        bool ForgotPassword(string Email);
+        bool ResetPassword(ResetPassword resetPassword);
         string GenerateSecurityToken(string Email, long UserId);
+        User GetUser(string email);
     }
 }

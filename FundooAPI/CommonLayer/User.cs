@@ -12,26 +12,17 @@ namespace CommonLayer
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserId { get; set; }
+        [Required]
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Password { get; set; }
+        [Required]
+        [RegularExpression("^[A-Za-z0-9+.-]{3,20}@[A-Za-z0-9]{1,10}.+(com|co.in|net|com.au)$", ErrorMessage = "Invalid Email")]
         public string Email { get; set; }
-        public string ConfirmPassword { get; set; }
-        public static object NewPassword { get; set; }
+        [Required]
+        public string Password { get; set; }
         public string CreateDate { get; set; }
         public string ModifiedDate { get; set; }
-    }
-    public class Login
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        
-    }
-    
-    public class ResetPassword
-    {
-        public string Email { get; set; }
-        public string NewPassword { get; set; }
+        public List<Notes> Notes { get; set; }
     }
 }
 

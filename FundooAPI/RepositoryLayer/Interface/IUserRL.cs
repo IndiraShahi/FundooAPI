@@ -7,10 +7,12 @@ namespace RepositoryLayer.Interface
 {
     public interface IUserRL
     {
-        User RegisterNewUser(User newUser);
+        bool RegisterNewUser(User newUser);
        
-        User UserLogin(string email , string password);
-        User ForgotPassword(string Email);
-        User ResetPassword(ResetPassword newPassword);
+        Response UserLogin(string email , string password);
+        bool ForgotPassword(string Email);
+        bool ResetPassword(ResetPassword resetPassword);
+        string GenerateSecurityToken(string email, long UserId);
+        User GetUser(string email);
     }
 }

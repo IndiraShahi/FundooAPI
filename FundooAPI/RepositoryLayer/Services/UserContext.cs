@@ -14,8 +14,16 @@ namespace RepositoryLayer.Services
             public UserContext(DbContextOptions options)
                 : base(options)
             {
+
             }
-            public DbSet<User> FundooNotes { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
         }
+        public DbSet<User> FundooNotes { get; set; }
+        public DbSet<Notes> Notes { get; set; }
+    }
     }
 
